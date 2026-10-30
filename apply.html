@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ISRO - Scientist/Engineer Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://img.magnific.com/premium-vector/geometric-science-education-background-vector-gradient-blue-digital-remix_53876-125993.jpg?semt=ais_hybrid&w=740&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        h2, h3 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        hr {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 95%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #003366;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #002244;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>ISRO Recruitment</h2>
+        <h3>Scientist/Engineer 'SC' Application</h3>
+
+        <hr>
+
+        <form id="regForm" onsubmit="return validateForm(event)">
+            <label>Full Name :</label><br>
+            <input type="text" name="name" id="name"><br><br>
+
+            <label>Age :</label><br>
+            <input type="number" name="age" id="age"><br><br>
+
+            <label>Discipline / Specialization :</label><br>
+            <select name="discipline" id="discipline">
+                <option value="">-- Choose Discipline --</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Aerospace">Aerospace</option>
+            </select><br><br>
+
+            <label>City :</label><br>
+            <input type="text" name="city" id="city"><br><br>
+
+            <label>Email Address :</label><br>
+            <input type="text" name="email" id="email"><br><br>
+
+            <label>Create Password :</label><br>
+            <input type="password" name="password" id="password"><br><br>
+
+            <button type="submit">Submit Application</button>
+        </form>
+
+        <hr>
+
+        <footer>
+            <p>Already applied? <a href="login.html">Check Status / Login</a></p>
+            <p>&copy; 2026 Indian Space Research Organisation</p>
+        </footer>
+    </div>
+
+    <script>
+        async function validateForm(event) {
+            if (event) event.preventDefault();
+
+            var n = document.getElementById("name").value.trim();
+            var a = document.getElementById("age").value.trim();
+            var d = document.getElementById("discipline").value;
+            var ci = document.getElementById("city").value.trim();
+            var e = document.getElementById("email").value.trim();
+            var p = document.getElementById("password").value;
+
+            if (n == "" || a == "" || d == "" || ci == "" || e == "" || p == "") {
+                alert("All fields must be filled out!");
+                return false;
+            }
+
+            const formData = { name: n, age: a, discipline: d, city: ci, email: e, password: p };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                alert(result.message);
+
+                if (result.success) {
+                    window.location.href = "login.html";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Could not connect to the server. Make sure server.js is running!");
+            }
+
+            return false;
+        }
+    </script>
+</body>
+</html>

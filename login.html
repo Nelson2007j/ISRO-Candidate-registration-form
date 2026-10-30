@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ISRO - Applicant Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://img.magnific.com/premium-vector/geometric-science-education-background-vector-gradient-blue-digital-remix_53876-125993.jpg?semt=ais_hybrid&w=740&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 80px 0;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        h2, h3 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        hr {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 95%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #003366;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #002244;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>ISRO Recruitment</h2>
+        <h3>Applicant Login</h3>
+
+        <hr>
+
+        <form id="loginForm" onsubmit="return validateLogin(event)">
+            <label>Email Address :</label><br>
+            <input type="text" name="email" id="loginEmail"><br><br>
+
+            <label>Password :</label><br>
+            <input type="password" name="password" id="loginPassword"><br><br>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <hr>
+
+        <footer>
+            <p>New applicant? <a href="apply.html">Register here</a></p>
+            <p>&copy; 2026 Indian Space Research Organisation</p>
+        </footer>
+    </div>
+
+    <script>
+        async function validateLogin(event) {
+            if (event) event.preventDefault();
+
+            var e = document.getElementById("loginEmail").value.trim();
+            var p = document.getElementById("loginPassword").value;
+
+            if (e == "" || p == "") {
+                alert("All fields must be filled out!");
+                return false;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: e, password: p })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert("Login Successful!");
+                    
+                    // Save applicant data for the dashboard session
+                    sessionStorage.setItem("applicantName", result.applicant.name);
+                    sessionStorage.setItem("savedEmail", result.applicant.email);
+                    sessionStorage.setItem("applicantCity", result.applicant.city);
+                    sessionStorage.setItem("savedDiscipline", result.applicant.discipline);
+
+                    window.location.href = "dashboard.html";
+                } else {
+                    alert(result.message || "Invalid Email or Password!");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Could not connect to the server.");
+            }
+
+            return false;
+        }
+    </script>
+
+</body>
+</html>

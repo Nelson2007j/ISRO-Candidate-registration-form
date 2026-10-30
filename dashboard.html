@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ISRO - Application Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://img.magnific.com/premium-vector/geometric-science-education-background-vector-gradient-blue-digital-remix_53876-125993.jpg?semt=ais_hybrid&w=740&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 20px;
+        }
+
+        .container {
+            width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        h2, h3, h4 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        hr {
+            border: 1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        .card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .subject-box {
+            background-color: #eef2f5;
+            border: 1px solid #bce8f1;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .subject-flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .subject-card-item {
+            background-color: #ffffff;
+            border: 1px solid #bce8f1;
+            border-radius: 4px;
+            padding: 15px;
+            flex: 1 1 220px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .subject-card-item h4 {
+            color: #003366;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #003366;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        button:hover {
+            background-color: #002244;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>ISRO Recruitment Dashboard</h2>
+        <hr>
+
+        <!-- Applicant Profile Card -->
+        <div class="card">
+            <h3>Applicant Profile</h3>
+            <p><strong>Name:</strong> <span id="displayName">Applicant</span></p>
+            <p><strong>Email:</strong> <span id="displayEmail">Not Available</span></p>
+            <p><strong>City:</strong> <span id="displayCity">Not Provided</span></p>
+            <p><strong>Discipline:</strong> <span id="displayDiscipline">Not Provided</span></p>
+        </div>
+
+        <!-- Application Status Section -->
+        <div class="card">
+            <h3>Application Status</h3>
+            <div class="subject-box">
+                <h4 id="displayStatusTitle">Status: Under Review</h4>
+                <p>Your application for Scientist/Engineer 'SC' has been successfully received and is currently being processed by the recruitment board.</p>
+                
+                <div id="subjectFlexContainer" class="subject-flex-container">
+                    <!-- Cards injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout -->
+        <div style="text-align: right;">
+            <a href="login.html"><button type="button" style="background-color: #dc3545;">Logout</button></a>
+        </div>
+    </div>
+
+    <script>
+        var isroPortalUrl = "https://www.isro.gov.in/Careers.html";
+
+        window.onload = function() {
+            var name = sessionStorage.getItem("applicantName");
+            var email = sessionStorage.getItem("savedEmail");
+            var city = sessionStorage.getItem("applicantCity");
+            var discipline = sessionStorage.getItem("savedDiscipline");
+
+            if (name != null) {
+                document.getElementById("displayName").innerText = name;
+            }
+            if (email != null) {
+                document.getElementById("displayEmail").innerText = email;
+            }
+            if (city != null && city != "") {
+                document.getElementById("displayCity").innerText = city;
+            }
+            if (discipline != null) {
+                document.getElementById("displayDiscipline").innerText = discipline;
+                document.getElementById("displayStatusTitle").innerText = "Discipline: " + discipline + " (Application Submitted)";
+            }
+
+            renderDashboardCards();
+        }
+
+        function createCard(title, btnText) {
+            return "<div class='subject-card-item'>" +
+                        "<h4>" + title + "</h4>" +
+                        "<a href='" + isroPortalUrl + "' target='_blank'>" +
+                            "<button type='button'>" + btnText + "</button>" +
+                        "</a>" +
+                   "</div>";
+        }
+
+        function renderDashboardCards() {
+            var flexContainer = document.getElementById("subjectFlexContainer");
+            var html = "";
+
+            html += createCard("Admit Card", "Download");
+            html += createCard("Syllabus & Guidelines", "View Details");
+            html += createCard("Previous Question Papers", "Access Portal");
+
+            flexContainer.innerHTML = html;
+        }
+    </script>
+
+</body>
+</html>
